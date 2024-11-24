@@ -4,7 +4,7 @@ from app.routes import auth_routes, user_routes
 
 # Initialize app
 app = FastAPI(
-    title="Quiz and Nootes App",
+    title="Quiz and Notes App",
     description="An API fro managing users, notes, quizzes and assignments",
     version="1.0.0",
 )

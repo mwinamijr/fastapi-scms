@@ -1,6 +1,6 @@
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
-from typing import List
 from app.schemas.user_schemas import UserCreate, UserResponse, UserUpdate
 from app.database import get_db
 from app.models.user_models import User
@@ -11,7 +11,7 @@ from app.crud.user_crud import (
     update_user,
     delete_user,
 )
-from app.dependencies import get_current_user, is_admin_or_self
+from app.dependencies import get_current_user
 
 router = APIRouter()
 
@@ -28,7 +28,7 @@ def get_users(
     """
     Get a list of all users (paginated). Only accessible to admins.
     """
-    if current_user.role != "admin":
+    if current_user.role.value != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Only admins can access this."
         )
@@ -66,10 +66,12 @@ def create_new_user(
     """
     Create a new user. Only accessible to admins.
     """
-    if current_user.role != "admin":
+    if user.role == "student":
+        return create_user(db, user)
+    if current_user.role.value != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Only admins can create users.",
+            detail="Only admins can create teachers or admin users.",
         )
     return create_user(db, user)
 
@@ -90,7 +92,7 @@ def update_existing_user(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found."
         )
     # Allow admins or the user themselves to update the profile
-    if current_user.role != "admin" and current_user.id != user_id:
+    if current_user.role.value.value != "admin" and current_user.id != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Access denied."
         )
@@ -106,7 +108,7 @@ def delete_user_account(
     """
     Delete a user account. Only accessible to admins.
     """
-    if current_user.role != "admin":
+    if current_user.role.value != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only admins can delete users.",

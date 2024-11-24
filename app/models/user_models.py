@@ -19,7 +19,7 @@ class User(BaseModel):
     first_name = Column(String(50), nullable=True)
     last_name = Column(String(50), nullable=True)
     role = Column(Enum(UserRole), nullable=False)  # "admin", "teacher", "student"
-    hashed_password = Column(String(128), nullable=False)
+    password = Column(String(128), nullable=False)
     created_at = Column(
         TIMESTAMP(timezone=True), server_default=text("now()"), nullable=False
     )

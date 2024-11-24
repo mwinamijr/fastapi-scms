@@ -1,21 +1,19 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy.orm import Session
 from jose import JWTError, jwt
-from app.models.user_models import User
+from app.models.user_models import User, UserRole
 from app.database import get_db
 from app.config import settings
-from sqlalchemy.orm import Session
-from app.models.user_models import UserRole
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
-ALGORITHM = "HS256"
 
 
 def decode_access_token(token: str):
     """
     Decodes a JWT and extracts the payload, converting role back to UserRole enum.
     """
-    payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
+    payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
     username = payload.get("sub")
     role = UserRole(payload.get("role"))  # Convert string back to UserRole enum
     return {"username": username, "role": role}
@@ -24,32 +22,27 @@ def decode_access_token(token: str):
 def get_current_user(
     token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
 ):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
     try:
         # Decode the token
-        payload = decode_access_token(token)
-        username: str = payload.get("username")
-        if username is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid token",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-
-        # Fetch user from database
-        user = db.query(User).filter(User.username == username).first()
-        if user is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="User not found",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-        return user
-    except JWTError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
         )
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+
+    # Fetch user from database
+    user = db.query(User).filter(User.username == username).first()
+    if user is None:
+        raise credentials_exception
+    return user
 
 
 def is_admin_or_self(

@@ -38,8 +38,9 @@ class UserResponse(UserBase):
 
 
 # Schema for User Login (Returned by /auth/me)
-class UserLogin(UserBase):
-    id: int
+class UserLogin(BaseModel):
+    username: constr(min_length=3, max_length=50)
+    password: constr(min_length=8, max_length=128)
 
 
 # Authentication tokens

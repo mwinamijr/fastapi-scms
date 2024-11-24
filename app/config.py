@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = os.getenv("SECRET_KEY")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
     ENVIRONMENT: str = os.getenv("ENVIRONMENT")
+    ALGORITHM: str = os.getenv("ALGORITHM")
 
     DATABASE_URL: str = (
         f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"

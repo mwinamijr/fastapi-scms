@@ -19,7 +19,7 @@ class Topic(BaseModel):
     __tablename__ = "topics"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(150), nullable=False)
+    name = Column(String(100), nullable=False)
     subject_id = Column(Integer, ForeignKey("subject.id"))
 
     subject = relationship("Subject", back_populates="topics")
@@ -30,7 +30,7 @@ class SubTopic(BaseModel):
     __tablename__ = "subtopics"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
+    name = Column(String(100), nullable=False)
     topic_id = Column(Integer, ForeignKey("topics.id"))
 
     topic = relationship("Topic", back_populates="subtopics")

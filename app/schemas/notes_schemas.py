@@ -15,7 +15,7 @@ class SubjectResponse(SubjectBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class TopicBase(BaseModel):
@@ -31,7 +31,7 @@ class TopicResponse(TopicBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class SubTopicBase(BaseModel):
@@ -47,7 +47,7 @@ class SubTopicResponse(SubjectBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class NoteBase(BaseModel):
@@ -72,7 +72,7 @@ class NoteResponse(NoteBase):
     created_by_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class IllustrationBase(BaseModel):
@@ -95,4 +95,41 @@ class IllustrationResponse(IllustrationBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+class SubjectOut(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        from_attributes = True
+
+
+class TopicOut(BaseModel):
+    id: int
+    name: str
+    subject_id: int
+
+    class Config:
+        from_attributes = True
+
+
+class SubtopicOut(BaseModel):
+    id: int
+    name: str
+    topic_id: int
+
+    class Config:
+        from_attributes = True
+
+
+class NoteOut(BaseModel):
+    id: int
+    title: str
+    content: str
+    subtopic_id: int
+    is_approved: bool
+
+    class Config:
+        from_attributes = True

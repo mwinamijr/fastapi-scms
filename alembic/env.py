@@ -8,6 +8,7 @@ from app.config import settings
 
 # import your models here
 from app.models.user_models import User
+from app.models.notes_models import Subject, Topic, SubTopic, Note, Illustration
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

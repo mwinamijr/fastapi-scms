@@ -12,7 +12,7 @@ class Subject(BaseModel):
     name = Column(String(100), unique=True, nullable=False)
     code = Column(String(10), unique=True, nullable=False)
 
-    topics = relationship("Topic", back_populates="subjects")
+    topics = relationship("Topic", back_populates="subject")
 
 
 class Topic(BaseModel):
@@ -20,7 +20,7 @@ class Topic(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False)
-    subject_id = Column(Integer, ForeignKey("subject.id"))
+    subject_id = Column(Integer, ForeignKey("subjects.id"))
 
     subject = relationship("Subject", back_populates="topics")
     subtopics = relationship("SubTopic", back_populates="topic")
@@ -42,10 +42,10 @@ class Note(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
-    content = Column(Text, nullble=False)
+    content = Column(Text, nullable=False)
     is_approved = Column(Boolean, default=False)
-    subtopic_id = Column(Integer, ForeignKey("subtopic.id"))
-    created_by_id = Column(Integer, ForeignKey=("users.id"))
+    subtopic_id = Column(Integer, ForeignKey("subtopics.id"))
+    created_by_id = Column(Integer, ForeignKey("users.id"))
 
     subtopic = relationship("Subtopic", back_populates="notes")
     created_by = relationship("User", back_populates="notes")

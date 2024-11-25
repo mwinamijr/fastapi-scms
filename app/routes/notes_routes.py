@@ -12,7 +12,7 @@ from app.crud import notes_crud
 UPLOAD_DIR = "uploaded_images"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-router = APIRouter(prefix="/notes", tags=["Notes"])
+router = APIRouter(tags=["Notes"])
 
 
 @router.post("/subjects", response_model=SubjectResponse)
@@ -44,7 +44,7 @@ def create_note(
     return notes_crud.create_note(db, note, current_user.id)
 
 
-@router.patch("/{note_id}/approve", response_model=NoteResponse)
+@router.put("/{note_id}/approve", response_model=NoteResponse)
 def approve_note(
     note_id: int, db: Session = Depends(get_db), current_user=Depends(get_current_user)
 ):
@@ -94,7 +94,7 @@ async def add_illustration(
     return notes_crud.create_illustration(db, illustration_data)
 
 
-@router.patch("/illustrations/{illustration_id}", response_model=IllustrationResponse)
+@router.put("/illustrations/{illustration_id}", response_model=IllustrationResponse)
 def modify_illustration(
     illustration_id: int,
     description: Optional[str] = None,

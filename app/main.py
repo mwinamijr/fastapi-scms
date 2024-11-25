@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import auth_routes, user_routes
+from app.routes import auth_routes, user_routes, notes_routes
 
 # Initialize app
 app = FastAPI(
@@ -22,6 +22,7 @@ app.add_middleware(
 # Register routes
 app.include_router(auth_routes.router, prefix="/auth", tags=["Authentication"])
 app.include_router(user_routes.router, prefix="/users", tags=["Users"])
+app.include_router(notes_routes.router, prefix="/notes", tags=["Notes"])
 
 
 # Root endpoint

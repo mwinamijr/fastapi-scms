@@ -57,6 +57,7 @@ class Illustration(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True)
     description = Column(String(150), nullable=True)
+    image = Column(String, nullable=True)  # This allows an optional image path or URL
     note_id = Column(Integer, ForeignKey("notes.id"))
 
     note = relationship("Note", back_populates="illustrations")

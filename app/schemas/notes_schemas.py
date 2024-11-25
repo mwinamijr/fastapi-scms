@@ -78,10 +78,17 @@ class NoteResponse(NoteBase):
 class IllustrationBase(BaseModel):
     description: constr(max_length=150) = None
     note_id: int
+    image: Optional[str] = None  # Optional field for image
 
 
 class IllustrationCreate(IllustrationBase):
     pass
+
+
+class IllustrationUpdate(IllustrationBase):
+    id: int
+    description: Optional[str] = None
+    image: Optional[str] = None
 
 
 class IllustrationResponse(IllustrationBase):

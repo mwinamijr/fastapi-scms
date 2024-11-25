@@ -50,3 +50,27 @@ def delete_note(db: Session, note_id: int):
         db.delete(note)
         db.commit()
     return note
+
+
+def create_illustration(db: Session, illustration: IllustrationCreate):
+    new_illustration = Illustration(**illustration.dict())
+    db.add(new_illustration)
+    db.commit()
+    db.refresh(new_illustration)
+    return new_illustration
+
+
+def update_illustration(
+    db: Session, illustration_id: int, new_illustration: IllustrationUpdate
+):
+    illustration = (
+        db.query(Illustration).filter(Illustration.id == illustration_id).first()
+    )
+    if illustration:
+        if new_illustration.description is not None:
+            illustration.description = new_illustration.description
+        if new_illustration.image is not None:
+            illustration.image = new_illustration.image
+        db.commit()
+        db.refresh(illustration)
+    return illustration

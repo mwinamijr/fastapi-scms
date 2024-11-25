@@ -5,10 +5,7 @@ from app.models.notes_models import Subject, Topic, SubTopic, Note
 from app.schemas.notes_schemas import SubjectOut, TopicOut, SubtopicOut, NoteOut
 from typing import List
 
-router = APIRouter(
-    prefix="/students",
-    tags=["Students"],
-)
+router = APIRouter()
 
 
 # Get all subjects

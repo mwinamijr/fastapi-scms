@@ -2,10 +2,11 @@ import os
 from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from sqlalchemy.orm import Session
 from app.dependencies import get_db, get_current_user
-from app.models.user_models import UserRole
+from app.models.user_models import UserRole, User
 from app.models.notes_models import Illustration
 from app.schemas.notes_schemas import *
 from app.crud import notes_crud
+from app.dependencies import get_current_user
 
 
 # Directory to store uploaded images
@@ -16,7 +17,19 @@ router = APIRouter(tags=["Notes"])
 
 
 @router.post("/subjects", response_model=SubjectResponse)
-def create_subject(subject: SubjectCreate, db: Session = Depends(get_db)):
+def create_subject(
+    subject: SubjectCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Create a new subject. Only accessible to admins.
+    """
+    if current_user.role.value != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only admins can create subjects.",
+        )
     return notes_crud.create_subject(db, subject)
 
 

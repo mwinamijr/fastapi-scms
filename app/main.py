@@ -1,11 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import auth_routes, learn_routes, user_routes, notes_routes
 
 # Initialize app
 app = FastAPI(
-    title="Quiz and Notes App",
-    description="An API fro managing users, notes, quizzes and assignments",
+    title="Hayatul SIMS API",
+    description="An API for  Hayatul SIMS application",
     version="1.0.0",
 )
 
@@ -19,14 +18,7 @@ app.add_middleware(
 )
 
 
-# Register routes
-app.include_router(auth_routes.router, prefix="/auth", tags=["Authentication"])
-app.include_router(user_routes.router, prefix="/users", tags=["Users"])
-app.include_router(notes_routes.router, prefix="/notes", tags=["Notes"])
-app.include_router(learn_routes.router, prefix="/learn", tags=["Learning"])
-
-
 # Root endpoint
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the Quiz and Notes App"}
+    return {"message": "Welcome to the Hayatul SIMS API"}

@@ -1,0 +1,21 @@
+from sqlalchemy import Boolean, Column, String, ForeignKey
+from app.database.models.base_model import BaseModel
+
+
+class User(BaseModel):
+    __tablename__ = "users"
+
+    school_id = Column(ForeignKey("schools.id"), nullable=False, index=True)
+
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
+
+    email = Column(String, unique=True, index=True, nullable=True)
+    phone = Column(String, unique=True, index=True, nullable=False)
+
+    password_hash = Column(String, nullable=False)
+
+    is_active = Column(Boolean, default=True)
+    is_verified = Column(Boolean, default=False)
+
+    user_type = Column(String, nullable=False)  # e.g: admin, teacher, staff

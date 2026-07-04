@@ -1,11 +1,9 @@
-from sqlalchemy import Column, String, ForeignKey
-from app.database.models.base_model import BaseModel
+from sqlalchemy import Column, String
+from app.database.models.base_model import TenantBaseModel
 
 
-class Role(BaseModel):
+class Role(TenantBaseModel):
     __tablename__ = "roles"
-
-    school_id = Column(ForeignKey("schools.id"), nullable=False, index=True)
 
     name = Column(String, nullable=False)
     description = Column(String, nullable=True)

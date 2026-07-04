@@ -9,8 +9,17 @@ T = TypeVar("T")
 
 class BaseResponse(BaseModel):
     id: UUID
-    created_at: datetime
-    updated_at: datetime
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class TenantBaseResponse(BaseModel):
+    id: UUID
+    school_id: UUID
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
 
     model_config = ConfigDict(from_attributes=True)
 

@@ -1,11 +1,9 @@
-from sqlalchemy import Boolean, Column, String, ForeignKey
-from app.database.models.base_model import BaseModel
+from sqlalchemy import Boolean, Column, String
+from app.database.models.base_model import TenantBaseModel
 
 
-class User(BaseModel):
+class User(TenantBaseModel):
     __tablename__ = "users"
-
-    school_id = Column(ForeignKey("schools.id"), nullable=False, index=True)
 
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)

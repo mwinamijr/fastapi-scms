@@ -1,6 +1,9 @@
 from sqlalchemy import asc, desc, or_
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from typing import Any, Generic, TypeVar, Type
+
+
 from app.database.base import Base
 
 ModelType = TypeVar("ModelType", bound=Base)
@@ -15,19 +18,31 @@ class BaseRepository(Generic[ModelType]):
         return self.db.query(self.model).filter(self.model.id == id).first()
 
     def create(self, obj: ModelType) -> ModelType:
-        self.db.add(obj)
-        self.db.commit()
-        self.db.refresh(obj)
-        return obj
+        try:
+            self.db.add(obj)
+            self.db.commit()
+            self.db.refresh(obj)
+            return obj
+        except SQLAlchemyError:
+            self.db.rollback()
+            raise
 
     def update(self, obj: ModelType) -> ModelType:
-        self.db.commit()
-        self.db.refresh(obj)
-        return obj
+        try:
+            self.db.commit()
+            self.db.refresh(obj)
+            return obj
+        except SQLAlchemyError:
+            self.db.rollback()
+            raise
 
     def delete(self, obj: ModelType) -> None:
-        self.db.delete(obj)
-        self.db.commit()
+        try:
+            self.db.delete(obj)
+            self.db.commit()
+        except SQLAlchemyError:
+            self.db.rollback()
+            raise
 
     def exists(self, **filters) -> bool:
         return self.db.query(self.model).filter_by(**filters).first() is not None
@@ -69,9 +84,7 @@ class BaseRepository(Generic[ModelType]):
         if order_by:
             column = getattr(self.model, order_by)
 
-            query = query.order_by(
-                desc(column) if order_desc else query.order_by(asc(column))
-            )
+            query = query.order_by(desc(column) if order_desc else asc(column))
 
         if skip is not None:
             query = query.offset(skip)

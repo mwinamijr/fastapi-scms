@@ -1,8 +1,11 @@
 from app.common.service.base import BaseService
+from app.modules.identity.models.user import User
 from app.modules.identity.repositories.user import UserRepository
 
 
-class UserService(BaseService[UserRepository]):
+class UserService(BaseService[UserRepository, User]):
+
+    model = User
 
     def __init__(self, repository: UserRepository):
         super().__init__(repository)

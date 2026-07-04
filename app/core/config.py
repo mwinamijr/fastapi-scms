@@ -17,6 +17,7 @@ class Settings:
     INITIALIZE_SECRET_KEY: str = os.getenv("SECRET_KEY", default="supersecretkey")
     SECRET_KEY: str = os.getenv("SECRET_KEY")
     ACCESS_TOKEN_EXPIRY_MINUTES: int = os.getenv("ACCESS_TOKEN_EXPIRY_MINUTES")
+    REFRESH_TOKEN_EXPIRY_DAYS: int = os.getenv("REFRESH_TOKEN_EXPIRY_DAYS")
     ENVIRONMENT: str = os.getenv("ENVIRONMENT")
     ALGORITHM: str = os.getenv("ALGORITHM")
 

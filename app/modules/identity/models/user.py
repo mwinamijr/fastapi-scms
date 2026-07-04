@@ -10,6 +10,7 @@ class User(BaseModel):
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
 
+    usernane = Column(String, unique=True, nullable=True)
     email = Column(String, unique=True, index=True, nullable=True)
     phone = Column(String, unique=True, index=True, nullable=False)
 

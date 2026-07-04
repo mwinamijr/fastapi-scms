@@ -7,7 +7,7 @@ class UserRepository(BaseRepository[User]):
     search_fields = ["first_name", "last_name", "email", "phone"]
 
     def __init__(self, db):
-        super().__init__(db, User)
+        super().__init__(User, db)
 
     def get_user_by_phone(self, phone: str):
         return self.db.query(User).filter(User.phone == phone).first()

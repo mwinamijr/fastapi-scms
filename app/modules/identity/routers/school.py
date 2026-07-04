@@ -42,13 +42,7 @@ def list_schools(
 
 @router.get("/{school_id}", response_model=SchoolResponseSchema)
 def get_school(school_id: UUID, service: SchoolService = Depends(get_school_service)):
-    school = service.get(school_id)
-    if school is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="School not found"
-        )
-
-    return school
+    return service.get(school_id)
 
 
 @router.put(

@@ -35,7 +35,7 @@ def list_users(
     limit: int = Query(default=20, ge=1, le=100),
     service: UserService = Depends(get_user_service),
 ):
-    return service.get_all(search=search, skip=skip, limit=limit)
+    return service.list_users(search=search, skip=skip, limit=limit)
 
 
 @router.get("/{user_id}", response_model=UserResponseSchema)
